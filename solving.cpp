@@ -8,20 +8,14 @@ int row[10][10], column[10][10], block[4][4][10];
 int known[10][10];
 const int colour[10] = { 0,3,4,13,5,11,6,14,2,9 };
 void print() {
-	cout << "    1   2   3    4   5   6    7   8   9   " << endl;
-	cout << "   =====================================  " << endl;
+	cout << endl;
 	for (int i = 1;i <= 9;i++) {
-		cout << i << "|| ";
 		for (int j = 1;j <= 9;j++) {
-			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), colour[sudoku[i][j]]);
 			cout << sudoku[i][j];
-			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
-			if (j % 3 != 0) cout << " | ";
-			else cout << " || ";
+			if (j % 3 != 0) cout << " ";
+			else cout << " ";
 		}
 		cout << endl;
-		if (i % 3 != 0)cout << "   -------------------------------------  " << endl;
-		else       cout << "   =====================================  " << endl;
 	}
 
 }
