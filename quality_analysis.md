@@ -1,12 +1,37 @@
-# Dillinger
-## _The Last Markdown Editor, Ever_
-
-![Alt text](./cppcheck.png)
-
-
+# 代码质量分析
+## 静态分析
 [![N|Solid](https://cldup.com/dTxpPi9lDf.thumb.png)](https://nodesource.com/products/nsolid)
 
-[![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
+使用的工具
+```sh
+cppcheck 2.10
+```
+
+分析得到的结果如下：
+![Alt text](./cppcheck.png)
+
+可以看到静态分析出的错误包括：局部变量与外部变量重名、未使用的变量、被赋值且未被使用的变量。
+
+如：
+```sh
+ int i = 0;
+    while (i < suduku_final_num)
+    {
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++)
+                outfile << Sudoku[i][j] << " ";
+            outfile << endl;
+        }
+```
+
+经过修改后静态分析只存在一个错误显示level变量未被使用过，但改参数实际在-m参数的功能中又被使用。由于静态分析存在一些局限性有时Cppcheck可能会产生一些误报或假阳性警告，即报告了并非真正存在问题的代码缺陷。
+
+修改后的分析结果：
+![Alt text](./cppcheck2.png)
+
+## 动态分析
+
+
 
 Dillinger is a cloud-enabled, mobile-ready, offline-storage compatible,
 AngularJS-powered HTML5 Markdown editor.
@@ -170,3 +195,6 @@ your preferred browser.
 MIT
 
 **Free Software, Hell Yeah!**
+
+
+
