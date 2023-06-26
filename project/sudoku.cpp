@@ -86,7 +86,10 @@ void cmd_c(int suduku_final_num)
 
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) 
-                outfile << Sudoku[i][j] << " ";
+            {
+                if (j!=8) outfile << Sudoku[i][j] << "&";
+                else outfile << Sudoku[i][j];
+            }
             outfile<<endl;
         }
         outfile<<endl;
@@ -107,33 +110,63 @@ void cmd_s(const char* filename){
     while (1) 
     {
         int cur_number;
+        char ch;
         ::memset(Game, 0 ,sizeof(Game));
         ::memset(Prob, 0 ,sizeof(Prob));
 
+        // for (int i = 0; i < 9; i++) 
+        //     for(int j = 0; j < 9; j++){
+        //         if(infile >> cur_number) {
+        //             Game[i][j] = cur_number;
+        //             Prob[i][j] = cur_number;
+        //         }
+        //         else {
+        //             infile.close();
+        //             outfile.close();
+        //             return;
+        //         }
+        //     } 
+           
         for (int i = 0; i < 9; i++) 
             for(int j = 0; j < 9; j++){
-                if(infile >> cur_number) {
-                    Game[i][j] = cur_number;
-                    Prob[i][j] = cur_number;
+                if(j !=8){
+                    if(infile >> cur_number) {
+                        Game[i][j] = cur_number;
+                        Prob[i][j] = cur_number;
+                        infile >> ch;
+                    }
+                    else {
+                        infile.close();
+                        return;
+                    }
                 }
-                else {
-                    infile.close();
-                    outfile.close();
-                    return;
+                else{
+                    if(infile >> cur_number) {
+                        Game[i][j] = cur_number;
+                        Prob[i][j] = cur_number;
+                    }
+                    else {
+                        infile.close();
+                        return ;
+                    }                    
                 }
             } 
-           
 
         if (Solve()){
             // print_in_terminal(Prob);
             for (int i = 0; i < 9; i++) {
                 for (int j = 0; j < 9; j++) 
-                    outfile << Game[i][j] << " ";
-
-                outfile<<"    |    ";
+                {
+                    if (j!=8) outfile << Game[i][j] << "&";
+                    else outfile << Game[i][j];
+                }
+                outfile<<" | ";
 
                 for (int j = 0; j < 9; j++) 
-                    outfile << Prob[i][j] << " ";
+                {
+                    if (j!=8) outfile << Prob[i][j] << "&";
+                    else outfile << Prob[i][j];
+                }
                 
                 outfile<<endl;
             }
@@ -141,9 +174,12 @@ void cmd_s(const char* filename){
         else {
             for (int i = 0; i < 9; i++) {
                 for (int j = 0; j < 9; j++)
-                    outfile << Game[i][j] << " ";
+                {
+                    if (j!=8) outfile << Game[i][j] << "&";
+                    else outfile << Game[i][j];
+                }
                 
-                if(i == 4) outfile<<"         "<< "No solution exists" ;
+                if(i == 4) outfile<< "  No solution exists" ;
                 
                 outfile<<endl; 
             }            
@@ -188,7 +224,10 @@ void cmd_n(int game_num, int blank_num, bool only, int bottom = 0, int top = 0){
 
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) 
-                outfile << Game[i][j] << " ";
+            {
+                if (j!=8) outfile << Game[i][j] << "&";
+                else outfile << Game[i][j];
+            }
             outfile<<endl;
         }
         outfile<<endl;
@@ -374,21 +413,18 @@ bool Solve()
 
 void Hint(){
     //TODO:打印提示信息
-    cout<< "Hint : "<<endl;
+    cout << "Hint : "<<endl;
+    cout << "-c: " << endl; 
+    cout << "-s: " << endl; 
+    cout << "-n: " << endl; 
+    cout << "-m: " << endl; 
+    cout << "-r: " << endl; 
+    cout << "-u: " << endl; 
+    
     exit(0);
 }
 int main(int argc, char** argv){
-    // cmd_c(5);
-    // cmd_n(3, 30, true);
-    // cmd_n(3, 30, false);
-    //cmd_s("Game.txt");
     srand(time(0) * time(0) - 0x5e2d6aa * rand() + time(0) * 338339 + time(0));//复杂的种子值
-
-    // cout << "Number of arguments: " << argc << endl;
-    // for(int i = 0; i < argc; i++)
-    // {
-    //     cout << "Argument " << i << ": " << argv[i] << endl;
-    // }
 
     if(strcmp(argv[0], "sudoku.exe") != 0) {
         Hint();
