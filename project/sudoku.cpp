@@ -101,6 +101,10 @@ void cmd_c(int suduku_final_num)
 void cmd_s(const char* filename){
     ifstream infile;
     infile.open(filename);
+    if(!infile.is_open()){
+        cout<<"File "<<filename<<" Not Exits"<<endl;
+        exit(0);
+    }
 
     ofstream outfile;
     outfile.open("sudoku.txt");
