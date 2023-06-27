@@ -414,14 +414,33 @@ bool Solve()
 void Hint(){
     //TODO:打印提示信息
     cout << "Hint : "<<endl;
-    cout << "-c: " << endl; 
-    cout << "-s: " << endl; 
-    cout << "-n: " << endl; 
-    cout << "-m: " << endl; 
-    cout << "-r: " << endl; 
-    cout << "-u: " << endl; 
+    cout << "-c: Generate Sudoku Final "<<endl<<"      sudoku.exe -c Number_of_Finals(1-1000000)" << endl; 
+    cout << "-s: Solving Sudoku "<<endl<<"      sudoku.exe -s Path_of_Sudoku_Chessboard(Absolute or relative path) "<< endl; 
+    cout << "-n: Generate Sudoku Games "<<endl<<"      sudoku.exe -n Number_of_games(1-10000)" << endl; 
+    cout << "-m: Set the difficulty level of the game (Must be used with - n) "<<endl<<"      sudoku.exe -n Number_of_games -m difficulty_level(1-3)" << endl; 
+    cout << "-r: Set the number of hollows in the game (Must be used with - n) "<<endl<<"      sudoku.exe -n Number_of_games -r range_of_number(connected by ~)" << endl; 
+    cout << "-u: Generate unique solutions for games (Must be used with - n) "<<endl<<"      sudoku.exe -n Number_of_games -u" << endl; 
     
     exit(0);
+}
+//
+bool hasNonDigits(char* str) {
+    int len = strlen(str);
+    for (int i = 0; i < len; i++) {
+        if (!isdigit(str[i])) {
+            return true;
+        }
+    }
+    return false;
+}
+bool contains_non_digit(string str)
+{
+    for (char c : str) {
+        if (!isdigit(c)) {
+            return true;
+        }
+    }
+    return false;
 }
 int main(int argc, char** argv){
     srand(time(0) * time(0) - 0x5e2d6aa * rand() + time(0) * 338339 + time(0));//复杂的种子值
@@ -434,8 +453,15 @@ int main(int argc, char** argv){
         if(strcmp(argv[1], "-c") == 0){
             // sudoku.exe -c 20
             //TODO:-c参数检验 argv[2]：1-1000000整数
-            int final_num = atoi(argv[2]);
-            cmd_c(final_num);
+            if(hasNonDigits(argv[2])){
+                Hint();
+            }
+            else{
+                int final_num = atoi(argv[2]);
+                if(final_num <1 || final_num>1000000) Hint();
+                else cmd_c(final_num);
+            }
+
         }
         else if(strcmp(argv[1], "-s") == 0)
         {
@@ -448,8 +474,14 @@ int main(int argc, char** argv){
         else if(strcmp(argv[1], "-n") == 0){
             // sudoku.exe -n 1000 
             //TODO:-n参数检验 argv[2]：1-10000整数
+            if(hasNonDigits(argv[2])){
+                Hint();
+            }
+            else{
             int Game_num = atoi(argv[2]);
-            cmd_n(Game_num, 30,false);
+                if(Game_num <1 || Game_num>10000) Hint();
+                else cmd_n(Game_num, 30,false);
+            }
         }
     }
     else{
@@ -466,21 +498,34 @@ int main(int argc, char** argv){
                 i++;
                 _n = true;
                 //TODO：-n参数检验 argv[i]：1-10000整数
+                if(hasNonDigits(argv[i])){
+                    Hint();
+                }
                 game_num = atoi(argv[i]);
+                if(game_num <1 || game_num>10000) Hint();
             }
             else if(strcmp(argv[i], "-m") == 0){
                 i++;
                 //TODO:-m参数检验 argv[i]：1 or 2 or 3
+                if(hasNonDigits(argv[i])){
+                    Hint();
+                }
                 level = atoi(argv[i]);
+                if(level != 1 && level != 2 && level != 3) Hint();
                 blank_num = BLANK[level-1];
+
             }
             else if(strcmp(argv[i], "-r") == 0){
                 i++;
                 //TODO:-r参数检验 argv[i]：integer1~integer2 20<=integer1<=integer2<=50
                 string s(argv[i]);
                 size_t pos = s.find('~');
+                if(pos == 0) Hint();
+                if(!contains_non_digit(s.substr(0, pos))) Hint();
+                if(!contains_non_digit(s.substr(pos + 1))) Hint();
                 bottom = stoi(s.substr(0, pos));
                 top = stoi(s.substr(pos + 1));  
+                if(bottom >= top|| bottom < 20 || top > 55) Hint();
             }
             else if(strcmp(argv[i], "-u") == 0){
                 isOnly = true;
