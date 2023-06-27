@@ -131,9 +131,17 @@ void cmd_s(const char* filename){
             for(int j = 0; j < 9; j++){
                 if(j !=8){
                     if(infile >> cur_number) {
+                        if (cur_number<0 ||cur_number>9){
+                            cout<<"Input File "<< filename <<" Format Error"<<endl;
+                            exit(0);
+                        }
                         Game[i][j] = cur_number;
                         Prob[i][j] = cur_number;
                         infile >> ch;
+                        if (ch != '&'){
+                            cout<<"Input File "<< filename <<" Format Error"<<endl;
+                            exit(0);
+                        }                       
                     }
                     else {
                         infile.close();
@@ -413,6 +421,7 @@ bool Solve()
 
 void Hint(){
     //TODO:打印提示信息
+    cout<<"Parameter Usage Error"<<endl;
     cout << "Hint : "<<endl;
     cout << "-c: Generate Sudoku Final "<<endl<<"      sudoku.exe -c Number_of_Finals(1-1000000)" << endl; 
     cout << "-s: Solving Sudoku "<<endl<<"      sudoku.exe -s Path_of_Sudoku_Chessboard(Absolute or relative path) "<< endl; 
@@ -489,7 +498,7 @@ int main(int argc, char** argv){
         int level = 0;//难度等级
         int bottom = 0;
         int top = 0;//空格范围
-        int blank_num ;//空格数
+        int blank_num = 0;//空格数
         bool isOnly = false;//是否唯一解
         int game_num = 0;//游戏局数 
         for(int i=1;i<argc;i++)
@@ -521,8 +530,8 @@ int main(int argc, char** argv){
                 string s(argv[i]);
                 size_t pos = s.find('~');
                 if(pos == 0) Hint();
-                if(!contains_non_digit(s.substr(0, pos))) Hint();
-                if(!contains_non_digit(s.substr(pos + 1))) Hint();
+                if(contains_non_digit(s.substr(0, pos))) Hint();
+                if(contains_non_digit(s.substr(pos + 1))) Hint();
                 bottom = stoi(s.substr(0, pos));
                 top = stoi(s.substr(pos + 1));  
                 if(bottom >= top|| bottom < 20 || top > 55) Hint();
