@@ -1,0 +1,15 @@
+sudoku -c 100
+sudoku -c 10000
+sudoku -s Game.txt
+sudoku -n 100
+sudoku -n 10 -u
+sudoku -n 10 -m 2
+sudoku -n 10 -r 20~55
+sudoku -r 20~55 -u -n 10
+sudoku -m 2 -u -n 10
+sudoku -c 123456789
+sudoku -s NotExits.txt
+sudoku -n 123a9
+sudoku -u
+sudoku -n 10 -m 5
+sudoku -n 10 -r 10~55
